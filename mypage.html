@@ -1,0 +1,42 @@
+<html>
+<body>
+	<div id="title">
+		<h1>Welcome To My Website</h1>
+		<p>This is where dreams come true</p>
+		<button onclick="makeDreamComeTrue()">Make dream come true</button>
+	</div>
+</body>
+</html>
+
+<style>
+
+body { 
+		background-image: url("https://cff2.earth.com/uploads/2017/11/08174338/How-ice-forms-inside-of-clouds.jpg");
+		background-size: cover;
+}
+
+h1 {
+	color: grey;
+}
+Button:hover {
+	background-color: pink;
+	cursor: pointer;
+	font-size: 20px;
+	
+}
+
+#title {
+	width: 100%;
+	text-align: center;
+	margin-top: 20px;
+}
+</style>
+
+<script>
+
+function makeDreamComeTrue() {
+	document.body.style.background = 'url("https://data.whicdn.com/images/277964014/original.gif")';
+	document.getElementById("title").style.visibility = "hidden";
+}
+
+</script>
