@@ -1,22 +1,36 @@
 <html>
 <body>
 	<div id="title">
-		<h1>Welcome To My Website</h1>
+		<h1>What Happens in Vegas Stays in Vegas</h1>
 		<p>This is where dreams come true</p>
 		<button onclick="makeDreamComeTrue()">Make dream come true</button>
 	</div>
 	<div class="Section">
-		<div class="Section-title">Craps Game </div>
-		<div class="Section-subtitle"> Enter username to begin </div>
-	</div>
+		<div class="Section-title">
+			Craps Game
+		</div>
 
+	<div id= "craps-registration-pane">
+		<div class="Section-subtitle">
+			 Enter username to begin
+		</div>
+		<div>
+		 <input id="craps-username"> 
+		</div>
+		<div>
+		<button onclick="registerCrapsPlayer ()">Make dream come true</button>
+		</div>
+		<div id= "craps-main-pane">
+			Main game section
+		</div>
+	</div>
 </body>
 </html>
 
 <style>
 
 body { 
-		background-image: url("https://cff2.earth.com/uploads/2017/11/08174338/How-ice-forms-inside-of-clouds.jpg");
+		background-image: url("https://g.foolcdn.com/editorial/images/600161/las-vegas-sign-at-dusk.jpg");
 		background-size: cover;
 }
 
@@ -26,10 +40,10 @@ body, html {
 }
 
 h1 {
-	color: grey;
+	color: black;
 }
 Button:hover {
-	background-color: pink;
+	background-color: red;
 	cursor: pointer;
 	font-size: 20px;
 	
@@ -54,13 +68,24 @@ Button:hover {
 	margin-bottom: 15px;
 }
 
+#crops-main-pane {
+	visibility: hidden;
+}
+
 </style>
 
 <script>
 
 function makeDreamComeTrue() {
-	document.body.style.background = 'url("https://data.whicdn.com/images/277964014/original.gif")';
+	document.body.style.background = 'url("https://media4.giphy.com/media/3o6MbqNPaatT8nnEmk/giphy.gif")';
 	document.getElementById("title").style.visibility = "hidden";
+}
+
+
+function registerCrapsPlayer (){
+	let crapsUserName = document.getElementById("craps-username").value
+	document.getElementById("craps-registration-pane").style.visibility = "hidden"
+	document.getElementById("craps-main-pane").style.visibility = "visible"
 }
 
 </script>
