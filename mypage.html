@@ -18,10 +18,15 @@
 		 <input id="craps-username"> 
 		</div>
 		<div>
-		<button onclick="registerCrapsPlayer ()">Make dream come true</button>
+		<button onclick="registerCrapsPlayer ()">Continue</button>
 		</div>
 		<div id= "craps-main-pane">
-			Main game section
+			<div>
+				User: <span id="craps-username-greeting"></span>
+			</div>
+			<div>
+				Main game section
+			</div>
 		</div>
 	</div>
 </body>
@@ -68,8 +73,8 @@ Button:hover {
 	margin-bottom: 15px;
 }
 
-#crops-main-pane {
-	visibility: hidden;
+#craps-main-pane {
+	display: none;
 }
 
 </style>
@@ -78,14 +83,26 @@ Button:hover {
 
 function makeDreamComeTrue() {
 	document.body.style.background = 'url("https://media4.giphy.com/media/3o6MbqNPaatT8nnEmk/giphy.gif")';
-	document.getElementById("title").style.visibility = "hidden";
+	document.getElementById("title").style.display = 'none'
 }
 
 
 function registerCrapsPlayer (){
 	let crapsUserName = document.getElementById("craps-username").value
-	document.getElementById("craps-registration-pane").style.visibility = "hidden"
-	document.getElementById("craps-main-pane").style.visibility = "visible"
+	
+	let invalidCharacterPattern = /^[0-9]|[^a-zA*Z0-0_]/g
+
+	let usernameIsInvalid = crapsUserName.length < 5
+	if (usernameIsInvalid || invalidCharacterPattern.test(crapsUserName)) {
+		crapsUserName = "User123"
+		alert("Username must be at least 5 characters, no spaces, cannot start with number: " + crapsUserName)
+
+
+	}
+
+	document.getElementById("craps-username-greeting").innerHTML = crapsUserName
+	document.getElementById("craps-registration-pane").style.display = 'none'
+	document.getElementById("craps-main-pane").style.display = 'block'
 }
 
 </script>
