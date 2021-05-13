@@ -49,11 +49,8 @@
 				</div>
 			</div>
 			<div class="craps-dice-info">
-				<div>
-					Dice 1: <span id="dice-roll-1"></span>
-				</div>
-				<div>
-					Dice 2: <span id="dice-roll-2"></span>
+				<div id= "dice-roll-area">
+
 				</div>
 				<div>
 					<span id="dice-roll-result"></span>
@@ -64,7 +61,7 @@
 					<span id="craps-result-description"></span>
 				</div>
 				<div id="craps-action-roll">
-					<button onclick="startDiceRoll()">ROLL</button>
+					<button onclick="doFirstRoll()">ROLL</button>
 				</div>
 				<div id="craps-action-continue-exit">
 					<button onclick="setupRound()">NEXT ROUND</button>
@@ -139,6 +136,11 @@ Button:hover {
 	cursor: pointer;
 	background-color: red !important;
 }
+#dice-roll-area {
+	width: 200px ;
+	height: 200px;
+	background-color: blue
+}
 
 #craps-action-continue-exit {
 	display: none
@@ -146,6 +148,7 @@ Button:hover {
 
 </style>
 
+<script type="text/javascript" src="https://unpkg.com/roll-a-die@2.0.1/dist/roll-a-die.js"></script>
 <script>
 
 function makeDreamComeTrue() {
@@ -185,8 +188,6 @@ function registerCrapsPlayer (){
 }
 
 function setupRound () {
-	document.getElementById("dice-roll-1").innerHTML = '-'
-	document.getElementById("dice-roll-2").innerHTML = '-'
 	document.getElementById("dice-roll-result").innerHTML = 'WAITING TO ROLL'
 
 	roundIsOver = true
@@ -214,21 +215,47 @@ function selectBet (bet) {
 
 function startDiceRoll() {
 	roundIsOver = false
-	document.getElementById("dice-roll-1").innerHTML = '...'
-	document.getElementById("dice-roll-2").innerHTML = '...'
 	document.getElementById("dice-roll-result").innerHTML = 'Rolling ...'
 	document.getElementById("craps-action-roll").style.display = 'none'
-	
-	// TODO: Add small delay before function
-	setTimeout(function(){ endDiceRoll() }, 850)
-}
 
-function endDiceRoll () {
 	let diceResult1 = getDiceResult()
 	let diceResult2 = getDiceResult()
-	document.getElementById("dice-roll-1").innerHTML = diceResult1
-	document.getElementById("dice-roll-2").innerHTML = diceResult2
+	runDiceAnimation(diceResult1, diceResult2)
 
+	return [diceResult1, diceResult2]
+
+	// TODO: Add small delay before function
+	setTimeout(function(){ handlefirstRoll(diceResult1, diceResult2) }, 850)
+}
+function getDiceResult () {
+	return Math.floor(Math.random() * 6) + 1
+}
+
+function runDiceAnimation (diceResult1, diceResult2) {
+	const element = document.getElementById('dice-roll-area')
+	const numberOfDice = 2
+	const options = {
+		element, // element to display the animated dice in.
+		numberOfDice, // number of dice to use 
+		callback: function(){}, //run nothing
+		values: [diceResult1, diceResult2],
+		delay: 10000000000000, 
+      }
+      rollADie(options)
+    }
+
+	function doFirstRoll () {
+		let [diceResult1, diceResult2] = startDiceRoll()
+		// Add small delay before function
+		setTimeout(function(){ 
+			handlefirstRoll(diceResult1, diceResult2) 
+		}, 850)
+	}
+
+
+function handlefirstRoll (diceResult1, diceResult2) {
+	
+	
 	let diceResultSum = diceResult1 + diceResult2 
 	let diceResultName 
 	if (diceResultSum === 7 || diceResultSum === 11 ) {
@@ -241,9 +268,23 @@ function endDiceRoll () {
 	document.getElementById("dice-roll-result").innerHTML = 'Sum ' + diceResultSum + ', RESULT: ' + diceResultName
 
 	if (diceResultName === 'POINT SCORE') {
-		document.getElementById("craps-result-description").innerHTML = 'NO WINNER FOR NOW'	
+		document.getElementById("dice-roll-result").innerHTML += ', rolling again...'
+		let scoreToWin
+		let socreToLose
+		if (selectedBet === 'PASS') {
+			scoreToWin = diceResultSum
+			socreToLose = 7
+		} else {
+			scoreToWin = 7
+			socreToLose = diceResultSum
+		}
+		document.getElementById("craps-result-description").innerHTML = 'Bet ' + selectedBet + ", need to roll a " + scoreToWin + ' before a ' + socreToLose	+ ' to win!'
 	} else {
-		if (selectedBet === diceResultName) {
+		settleRound(diceResultName)
+	}
+}
+function settleRound (diceResultName){
+	if (selectedBet === diceResultName) {
 			document.getElementById("craps-result-description").innerHTML = 'YOU WIN!'
 			moneyAvailable += defaultBetAmount	
 		} else {
@@ -251,16 +292,10 @@ function endDiceRoll () {
 			moneyAvailable -= defaultBetAmount
 		}
 
-	}
-roundsLasted += 1
-document.getElementById("craps-user-money").innerHTML = moneyAvailable 
-document.getElementById("craps-user-rounds").innerHTML = roundsLasted 
-document.getElementById("craps-action-continue-exit").style.display = 'block'
-}
-
-function getDiceResult () {
-	return Math.floor(Math.random() * 6) + 1
-
+	roundsLasted += 1
+	document.getElementById("craps-user-money").innerHTML = moneyAvailable 
+	document.getElementById("craps-user-rounds").innerHTML = roundsLasted 
+	document.getElementById("craps-action-continue-exit").style.display = 'block'
 }
 
 function endGame () {
@@ -274,7 +309,12 @@ function endGame () {
 	roundsLasted = 0 
 	document.getElementById("craps-user-money").innerHTML = moneyAvailable 
 	document.getElementById("craps-user-rounds").innerHTML = roundsLasted 
+
+// remove everything inside the dice-roll-area
+	document.getElementById('dice-roll-area').innerHTML = '' 
 }
+
+
 //////////////////////////////////////////////////////////
 //														//
 //				End Craps Section					 	//
