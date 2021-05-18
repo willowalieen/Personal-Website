@@ -45,7 +45,12 @@
 					</div>
 				</div>
 				<div>
-					Bet Amount: 100$
+					<div> Bet Amount:</div>
+					<div>
+						<span class= "craps-bet-change" onclick="decreaseBet()">-</span>
+						<span id="craps-bet-amount">100</span>$ 
+						<span class= "craps-bet-change" onclick="increaseBet()">+</span>
+					</div>
 				</div>
 			</div>
 			<div class="craps-dice-info">
@@ -136,6 +141,18 @@ Button:hover {
 	cursor: pointer;
 	background-color: red !important;
 }
+#craps-bet-amount {
+	user-select: none;
+} 
+.craps-bet-change {
+	margin: 0 10px;
+	font-size: 24px;
+	user-select: none;
+}
+.craps-bet-change:hover {
+	cursor: pointer;
+}
+
 #dice-roll-area {
 	width: 200px ;
 	height: 200px;
@@ -163,7 +180,8 @@ function makeDreamComeTrue() {
 //////////////////////////////////////////////////////////
 
 let moneyAvailable = 1000
-let defaultBetAmount = 100
+let betAmount = 100
+let minimunBet = 100 
 let roundsLasted = 0
 let selectedBet = 'PASS'
 let roundIsOver = true
@@ -194,6 +212,11 @@ function setupRound () {
 	roundIsOver = true
 	selectBet(selectedBet)
 
+	if (betAmount >= moneyAvailable){
+	betAmount = minimunBet
+	document.getElementById("craps-result-description").innerHTML = betAmount
+
+	}
 	// Close Actions and Open Roll
 	document.getElementById("craps-action-continue-exit").style.display = 'none'
 	document.getElementById("craps-action-roll").style.display = 'block'
@@ -212,6 +235,21 @@ function selectBet (bet) {
 			document.getElementById("craps-result-description").innerHTML = 'Bet NO PASS - Need a 2, 3 or 12 to win!'
 		}
 	}	
+}
+
+function increaseBet(){
+	if (betAmount < moneyAvailable) {
+		betAmount += minimunBet
+	document.getElementById('craps-bet-amount').innerHTML = betAmount
+	}
+}	
+	
+
+function decreaseBet(){
+	if (betAmount > minimunBet) {
+		betAmount -= minimunBet
+	document.getElementById('craps-bet-amount').innerHTML = betAmount
+}
 }
 
 // Dice Rolling Utilities 
@@ -312,10 +350,10 @@ function doPointRoll (pointScore) {
 function settleRound (diceResultName){
 	if (selectedBet === diceResultName) {
 			document.getElementById("craps-result-description").innerHTML = 'YOU WIN!'
-			moneyAvailable += defaultBetAmount	
+			moneyAvailable +=BetAmount	
 		} else {
 			document.getElementById("craps-result-description").innerHTML = 'YOU LOSE :('	
-			moneyAvailable -= defaultBetAmount
+			moneyAvailable -= BetAmount
 		}
 
 	roundsLasted += 1
