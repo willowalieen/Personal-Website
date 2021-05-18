@@ -168,6 +168,7 @@ let roundsLasted = 0
 let selectedBet = 'PASS'
 let roundIsOver = true
 
+// Game and Round set up
 function registerCrapsPlayer (){
 	let crapsUserName = document.getElementById("craps-username").value
 
@@ -213,6 +214,7 @@ function selectBet (bet) {
 	}	
 }
 
+// Dice Rolling Utilities 
 function startDiceRoll() {
 	roundIsOver = false
 	document.getElementById("dice-roll-result").innerHTML = 'Rolling ...'
@@ -244,15 +246,14 @@ function runDiceAnimation (diceResult1, diceResult2) {
       rollADie(options)
     }
 
-	function doFirstRoll () {
+// First Roll Handling	
+function doFirstRoll () {
 		let [diceResult1, diceResult2] = startDiceRoll()
 		// Add small delay before function
 		setTimeout(function(){ 
 			handlefirstRoll(diceResult1, diceResult2) 
 		}, 850)
 	}
-
-
 function handlefirstRoll (diceResult1, diceResult2) {
 	
 	
@@ -279,10 +280,35 @@ function handlefirstRoll (diceResult1, diceResult2) {
 			socreToLose = diceResultSum
 		}
 		document.getElementById("craps-result-description").innerHTML = 'Bet ' + selectedBet + ", need to roll a " + scoreToWin + ' before a ' + socreToLose	+ ' to win!'
+
+		setTimeout(function(){ 
+			doPointRoll(diceSumResult)
+		}, 1000)
 	} else {
 		settleRound(diceResultName)
 	}
 }
+
+// Point Roll handling 
+function doPointRoll (pointScore) {
+		let [diceResult1, diceResult2] = startDiceRoll()
+		let diceSumResult = diceResult1 + diceResult2
+		
+		setTimeout(function(){ 
+		if (diceSumResult === 7) { 
+			document.getElementById("dice-roll-result").innerHTML = 'Sum ' + diceResultSum + ', RESULT: NO PASS ' 
+			settleRound('NO PASS')
+		} else if (diceSumResult === pointScore) {
+			document.getElementById("dice-roll-result").innerHTML = 'Sum ' + diceResultSum + ', RESULT: PASS ' 
+			settleRound('PASS')
+		} else {
+			console.log('Rolling Again')
+			doPointRoll(pointScore)
+		}
+		}, 1700)
+	}
+
+// End Round game Managing 
 function settleRound (diceResultName){
 	if (selectedBet === diceResultName) {
 			document.getElementById("craps-result-description").innerHTML = 'YOU WIN!'
@@ -296,6 +322,11 @@ function settleRound (diceResultName){
 	document.getElementById("craps-user-money").innerHTML = moneyAvailable 
 	document.getElementById("craps-user-rounds").innerHTML = roundsLasted 
 	document.getElementById("craps-action-continue-exit").style.display = 'block'
+
+	if (moneyAvailable === 0) {
+		endGame
+	}
+
 }
 
 function endGame () {
@@ -313,7 +344,6 @@ function endGame () {
 // remove everything inside the dice-roll-area
 	document.getElementById('dice-roll-area').innerHTML = '' 
 }
-
 
 //////////////////////////////////////////////////////////
 //														//
