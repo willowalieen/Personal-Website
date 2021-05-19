@@ -320,7 +320,7 @@ function handlefirstRoll (diceResult1, diceResult2) {
 		document.getElementById("craps-result-description").innerHTML = 'Bet ' + selectedBet + ", need to roll a " + scoreToWin + ' before a ' + socreToLose	+ ' to win!'
 
 		setTimeout(function(){ 
-			doPointRoll(diceSumResult)
+			doPointRoll(diceResultSum)
 		}, 1000)
 	} else {
 		settleRound(diceResultName)
@@ -330,14 +330,14 @@ function handlefirstRoll (diceResult1, diceResult2) {
 // Point Roll handling 
 function doPointRoll (pointScore) {
 		let [diceResult1, diceResult2] = startDiceRoll()
-		let diceSumResult = diceResult1 + diceResult2
+		let diceResultSum = diceResult1 + diceResult2
 		
 		setTimeout(function(){ 
-		if (diceSumResult === 7) { 
-			document.getElementById("dice-roll-result").innerHTML = 'Sum ' + diceResultSum + ', RESULT: NO PASS ' 
+		if (diceResultSum === 7) { 
+			document.getElementById('dice-roll-result').innerHTML = 'Sum: ' + diceResultSum + ', RESULT: NO PASS ' 
 			settleRound('NO PASS')
-		} else if (diceSumResult === pointScore) {
-			document.getElementById("dice-roll-result").innerHTML = 'Sum ' + diceResultSum + ', RESULT: PASS ' 
+		} else if (diceResultSum === pointScore) {
+			document.getElementById('dice-roll-result').innerHTML = 'Sum: ' + diceResultSum + ', RESULT: PASS ' 
 			settleRound('PASS')
 		} else {
 			console.log('Rolling Again')
@@ -350,10 +350,10 @@ function doPointRoll (pointScore) {
 function settleRound (diceResultName){
 	if (selectedBet === diceResultName) {
 			document.getElementById("craps-result-description").innerHTML = 'YOU WIN!'
-			moneyAvailable +=BetAmount	
+			moneyAvailable +=betAmount	
 		} else {
 			document.getElementById("craps-result-description").innerHTML = 'YOU LOSE :('	
-			moneyAvailable -= BetAmount
+			moneyAvailable -= betAmount
 		}
 
 	roundsLasted += 1
